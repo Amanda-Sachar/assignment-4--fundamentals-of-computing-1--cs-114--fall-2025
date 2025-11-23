@@ -1,16 +1,17 @@
 int row;
 int col;
 boolean isPlayersTurn=false;
-char[] horSetOne={'-','-','-'};
-char[] horSetTwo={'-','-','-'};
-char[] horSetThree={'-','-','-'};
+int[] horSetOne={0,1,2};
+int[] horSetTwo={3,4,5};
+int[] horSetThree={6,7,8};
 
-char[] verSetOne={'-','-','-'};
-char[] verSetTwo={'-','-','-'};
-char[] verSetThree={'-','-','-'};
+int[] verSetOne={horSetOne[0],horSetTwo[0],horSetThree[0]};
+int[] verSetTwo={horSetOne[1],horSetTwo[1],horSetThree[0]};
+int[] verSetThree={horSetOne[2],horSetTwo[2],horSetThree[0]};
 
-char[] diagSetOne={'-','-','-'};
-char[] diagSetTwo={'-','-','-'};
+int[] diagSetOne={0,4,8};
+int[] diagSetTwo={2,4,6};
+char[] slotsOpen=new char[8];
 //Have sets be blank, then as played update them?
 //have one grid and use a double for loop?, 
 /*check if array[0][0]==array[1][0], then if array[1][0]==array[2][0]
@@ -45,6 +46,9 @@ methodCalledAfterMoveIsMade(){
 void setup() {
   size(500, 500);
   println(CIRCRADIUS);
+  for (int valueToGive=0;valueToGive<8;valueToGive++){
+    slotsOpen[valueToGive]=Integer.toString(valueToGive).charAt(0);
+  }
   
 }
 
@@ -54,14 +58,19 @@ void draw() {
 
 void keyReleased(){
   //horizLocation
+  if (slotsOpen[key]!=' '){
+  slotsOpen[key]=' ';
   if (key=='0'||key=='3'||key=='6'){
     row=0;
   }
   else if(key=='1'||key=='4'||key=='7'){
     row=1;
   }
-  else{
+  else if (key=='2'||key=='5'||key=='8'){
     row=2;
+  }
+  else{
+    ErrorWasMade();
   }
   
   //vert Location
@@ -71,13 +80,27 @@ void keyReleased(){
   else if(key=='3'||key=='4'||key=='5'){
     col=1;
   }
-  else{
+  else  if (key=='6'||key=='7'||key=='8'){
     col=2;
   }
+  else{
+    ErrorWasMade();
+  }
   
-    shapes(row,col);
-
+  shapes(row,col);
   
   println(key);
   println();
+  }
+  else{
+    ErrorWasMade();
+  }
+}
+void makeMove(){
+  if (isPlayersTurn){
+    
+  }
+}
+void ErrorWasMade(){
+  println("Invalid input, try again");
 }
