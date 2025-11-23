@@ -11,7 +11,9 @@ int[] verSetThree={horSetOne[2],horSetTwo[2],horSetThree[0]};
 
 int[] diagSetOne={0,4,8};
 int[] diagSetTwo={2,4,6};
-char[] slotsOpen=new char[8];
+IntList hasBeenPlayed;
+int valueComputerChosen;
+int rand;
 //Have sets be blank, then as played update them?
 //have one grid and use a double for loop?, 
 /*check if array[0][0]==array[1][0], then if array[1][0]==array[2][0]
@@ -44,63 +46,116 @@ methodCalledAfterMoveIsMade(){
 }
 */
 void setup() {
+  hasBeenPlayed=new IntList();
   size(500, 500);
   println(CIRCRADIUS);
-  for (int valueToGive=0;valueToGive<8;valueToGive++){
-    slotsOpen[valueToGive]=Integer.toString(valueToGive).charAt(0);
+  for (int valueToGive=0;valueToGive<=8;valueToGive++){
+    hasBeenPlayed.set(valueToGive,valueToGive);
+    println(hasBeenPlayed.get(valueToGive));
   }
   
 }
 
 void draw() {
+  if(isPlayersTurn==false){
+    ChoosingComputerMove();
+    ComputerMakeMove();
+  }
   grid();
 }
 
 void keyReleased(){
-  //horizLocation
-  if (slotsOpen[key]!=' '){
-  slotsOpen[key]=' ';
-  if (key=='0'||key=='3'||key=='6'){
-    row=0;
-  }
-  else if(key=='1'||key=='4'||key=='7'){
-    row=1;
-  }
-  else if (key=='2'||key=='5'||key=='8'){
-    row=2;
-  }
-  else{
-    ErrorWasMade();
-  }
-  
-  //vert Location
-  if (key=='0'||key=='1'||key=='2'){
-    col=0;
-  }
-  else if(key=='3'||key=='4'||key=='5'){
-    col=1;
-  }
-  else  if (key=='6'||key=='7'||key=='8'){
-    col=2;
-  }
-  else{
-    ErrorWasMade();
-  }
-  
-  shapes(row,col);
-  
-  println(key);
-  println();
-  }
-  else{
-    ErrorWasMade();
-  }
-}
-void makeMove(){
   if (isPlayersTurn){
-    
+    println("You have chosen slot "+key);
+    if (hasBeenPlayed.hasValue(Character.getNumericValue(key))){
+      if (key=='0'){
+        shapes(0,0);
+      }
+      else if (key=='1'){
+        shapes(0,1);
+      }
+      else if (key=='2'){
+        shapes(0,2);
+      }
+      else if (key=='3'){
+        shapes(1,0);
+      }
+      else if (key=='4'){
+        shapes(1,1);
+      }
+      else if (key=='5'){
+        shapes(1,2);
+      }
+      else if (key=='6'){
+        shapes(2,0);
+      }
+      else if (key=='7'){
+        shapes(2,1);
+      }
+      else if (key=='8'){
+        shapes(2,2);
+      }
+    hasBeenPlayed.set(Character.getNumericValue(key),10);
+    println(hasBeenPlayed);
+    ChangeCurrentPlayer();
+    }
+    else{
+      ErrorWasMade();
+    }
   }
 }
+void ChoosingComputerMove(){
+  rand=int(random(0,9));
+  if (hasBeenPlayed.get(rand)!=10){
+    valueComputerChosen=hasBeenPlayed.get(rand);
+  }
+  else{
+    ChoosingComputerMove();
+  }
+}
+
+void ComputerMakeMove(){
+    println("The computer has chosen slot "+valueComputerChosen);
+    if (valueComputerChosen==0){
+      shapes(0,0);
+    }
+    else if (valueComputerChosen==1){
+      shapes(0,1);
+    }
+    else if (valueComputerChosen==2){
+      shapes(0,2);
+    }
+    else if (valueComputerChosen==3){
+      shapes(1,0);
+    }
+    else if (valueComputerChosen==4){
+      shapes(1,1);
+    }
+    else if (valueComputerChosen==5){
+      shapes(1,2);
+    }
+    else if (valueComputerChosen==6){
+      shapes(2,0);
+    }
+    else if (valueComputerChosen==7){
+      shapes(2,1);
+    }
+    else if (valueComputerChosen==8){
+      shapes(2,2);
+    }
+    hasBeenPlayed.set(rand,10);
+    println(hasBeenPlayed);
+   ChangeCurrentPlayer();
+}
+
 void ErrorWasMade(){
   println("Invalid input, try again");
+}
+void ChangeCurrentPlayer(){
+  if (isPlayersTurn){
+    isPlayersTurn=false;
+  }
+  else{
+    isPlayersTurn=true;
+  }
 }

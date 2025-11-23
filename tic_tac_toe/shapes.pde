@@ -1,14 +1,12 @@
-void shapes(int row, int col){
+void shapes(int col, int row){
   if (isPlayersTurn){
     //O
     circle(166/2+166*row,166/2+166*col,CIRCRADIUS);
-    isPlayersTurn=false;
   }
   else{
     //X
     line(166*row,166*col,166*(row+1),166*(col+1));
     line(166*(row+1),166*col,166*row,166*(col+1));
-    isPlayersTurn=true;
   }
   println("the row is "+row);
   println("the col is "+col);
