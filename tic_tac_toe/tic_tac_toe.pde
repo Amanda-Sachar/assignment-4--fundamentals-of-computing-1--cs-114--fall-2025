@@ -25,46 +25,13 @@ boolean gameOver=false;
 boolean XHasWon=false;
 boolean OHasWon=false;
 
-//Have sets be blank, then as played update them?
-//have one grid and use a double for loop?,
-/*check if array[0][0]==array[1][0], then if array[1][0]==array[2][0]
-while x<=2 check if !!find if can make ths check twice!!(array[x][y]==array[++x][y]), runs next,
-while y<=2 check if array[x][y]==array[x][++y]
-if fails, set x & y==0
-
-methodCalledAfterMoveIsMade(){
-  H CHECK
-  for(int x=0, y=0;y<=2;y++){
-    if (array[x][y]==array[++x][y] && array[x][y]==array[++x][y]){
-      currentPlayerWins
-    }
-  V CHECK
-  for(int x=0, y=0;x<=2;x++){
-    if (array[x][y]==array[x][++y] && array[x][y]==array[x][++y]){
-      currentPlayerWins
-    }
-  }
-  D CHECK,
-      one has only x, x=0 and increase: array[x][x]==array[++x][x] X2, other has x=2 to start and array[x][2-x]==array[--x][2-x] X2
-  x=0;
-    if (array[x][x]==array[++x][x] && array[x][x]==array[++x][x]){
-      currentPlayerWins
-    }
-  x=0;
-    if (array[x][2-x]==array[--x][2-x] && array[x][2-x]==array[--x][2-x]){
-      currentPlayerWins
-    }
-}
-*/
 void setup() {
   slotsOpen=new IntList();
   size(500, 500);
-  println(CIRCRADIUS);
   for (int valueToGive=0;valueToGive<=8;valueToGive++){
     slotsOpen.set(valueToGive,valueToGive);
     println(slotsOpen.get(valueToGive));
   }
-
 }
 
 void draw() {
@@ -76,10 +43,10 @@ void draw() {
     grid();
      if(XHasWon==false)
       checkForOVictory();
-    if(OHasWon==false)
+     if(OHasWon==false)
       checkForXVictory();
    
-    else if(turnCount>=9){
+    if(turnCount>=9&&XHasWon==false&&OHasWon==false){
       gameOver=true;
       println("Game Over, No winners");
       
@@ -148,6 +115,7 @@ void keyReleased(){
 void ChoosingComputerMove(){
   rand=int(random(0,9));
   if (slotsOpen.get(rand)!=10){
+    //10 is used to say that the slot has something in it, so it cant be changed
     valueComputerChosen=slotsOpen.get(rand);
   }
   else{
@@ -187,28 +155,26 @@ void ComputerMakeMove(){
     turnCount++;
     boardPrint();
     slotsOpen.set(rand,10);
-    //println(slotsOpen);
    ChangeCurrentPlayer();
 }
+
+
 void checkForXVictory(){
-//for(int row=0;row<3;row++){
-//    println("");
-//  for(int col=0;col<3;col++){
-//      print(BoardState[row][col]+" ");
-//    }
-//  }
+//checks for horizantal win
   for(int x=0;x<3;x++){
     if(boardState[0][x]==boardState[1][x]&& boardState[0][x]==boardState[2][x] && boardState[0][x]=='X'){
       println("Game Over, X Has Won");
       gameOver=true;
       XHasWon=true;
     }
+//checks for vertical win
     if(boardState[x][0]==boardState[x][1]&& boardState[x][0]==boardState[x][2] && boardState[x][0]=='X'){
       println("Game Over, X Has Won");
       gameOver=true;
       XHasWon=true;
     }
   }
+//checks for diagonal win
     if(boardState[0][0]==boardState[1][1]&& boardState[0][0]==boardState[2][2] && boardState[0][0]=='X'||
     boardState[0][2]==boardState[1][1]&& boardState[0][2]==boardState[2][0] && boardState[1][1]=='X'){
       println("Game Over, X Has Won");
@@ -217,25 +183,23 @@ void checkForXVictory(){
     }
 
 }
+
 void checkForOVictory(){
-//for(int row=0;row<3;row++){
-//    println("");
-//  for(int col=0;col<3;col++){
-//      print(BoardState[row][col]+" ");
-//    }
-//  }
+//checks for horizantal win
   for(int x=0;x<3;x++){
     if(boardState[0][x]==boardState[1][x]&& boardState[0][x]==boardState[2][x] && boardState[0][x]=='O'){
       println("Game Over, O Has Won");
       gameOver=true;
       OHasWon=true;
     }
+//checks for vertical win
     if(boardState[x][0]==boardState[x][1]&& boardState[x][0]==boardState[x][2] && boardState[x][0]=='O'){
       println("Game Over, O Has Won");
       gameOver=true;
       OHasWon=true;
     }
   }
+//checks for diagonal win
   if(boardState[0][0]==boardState[1][1]&& boardState[0][0]==boardState[2][2] && boardState[0][0]=='O'||
    boardState[0][2]==boardState[1][1]&& boardState[0][2]==boardState[2][0] && boardState[1][1]=='O'){
     println("Game Over, O Has Won");
@@ -247,6 +211,7 @@ void checkForOVictory(){
 void ErrorWasMade(){
   println("Invalid input, try again");
 }
+
 void ChangeCurrentPlayer(){
   if (isPlayersTurn){
     isPlayersTurn=false;

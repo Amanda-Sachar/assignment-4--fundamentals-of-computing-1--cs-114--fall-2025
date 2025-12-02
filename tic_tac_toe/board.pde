@@ -2,6 +2,8 @@ void grid(){
   strokeWeight(1);
   stroke(0,0,0);
   fill(0,0,0);
+  
+  //has corresponding control in each location
   text("0",10,20);
   text("1",176,20);
   text("2",176+166,20);

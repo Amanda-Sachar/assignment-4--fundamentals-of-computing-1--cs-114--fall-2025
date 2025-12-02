@@ -1,4 +1,5 @@
 void shapes(int row, int col){
+  //row and col refer to the game board
   if (isPlayersTurn){
     //O
     noFill();
@@ -15,21 +16,4 @@ void shapes(int row, int col){
     line(166*(row+1),166*col,166*row,166*(col+1));
     boardState[col][row]='X';
   }
-  println("the row is "+row);
-  println("the col is "+col);
 }
-//class O{
-//  int row, col;
-//  O(int centerX, int centerY){
-//    row=centerX;
-//    col=centerY;
-//  }
-//}
-
-//class X{
-//  int row, col;
-//  X(int X, int Y){
-//    row=X;
-//    col=Y;
-//  }
-//}
