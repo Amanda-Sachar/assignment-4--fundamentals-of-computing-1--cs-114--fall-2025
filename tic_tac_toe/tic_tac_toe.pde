@@ -1,36 +1,31 @@
 int row;
 int col;
-boolean isPlayersTurn=false;
-int[] horSetOne={0,1,2};
-int[] horSetTwo={3,4,5};
-int[] horSetThree={6,7,8};
-
-int[] verSetOne={horSetOne[0],horSetTwo[0],horSetThree[0]};
-int[] verSetTwo={horSetOne[1],horSetTwo[1],horSetThree[0]};
-int[] verSetThree={horSetOne[2],horSetTwo[2],horSetThree[0]};
-
-int[] diagSetOne={0,4,8};
-int[] diagSetTwo={2,4,6};
-IntList slotsOpen;
 int valueComputerChosen;
 int rand;
+int turnCount;
 
+IntList slotsOpen;
+
+//when moving initialzation into set up nothing was able to access the following. What do i do? set up is the constructer(i think?) so should have initialization there?
 char[] rowOne={'_','_','_'};
 char[] rowTwo={'_','_','_'};
 char[] rowThree={'_','_','_'};
 char[][]boardState={rowOne,rowTwo,rowThree};
-int turnCount=0;
 
-boolean gameOver=false;
-boolean XHasWon=false;
-boolean OHasWon=false;
+boolean isPlayersTurn;
+boolean gameOver;
+boolean XHasWon;
+boolean OHasWon;
 
 void setup() {
+  isPlayersTurn=false;
   slotsOpen=new IntList();
+  gameOver=false;
+  XHasWon=false;
+  OHasWon=false;
   size(500, 500);
   for (int valueToGive=0;valueToGive<=8;valueToGive++){
     slotsOpen.set(valueToGive,valueToGive);
-    println(slotsOpen.get(valueToGive));
   }
 }
 
@@ -53,21 +48,10 @@ void draw() {
     }
   }
 }
-void boardPrint(){
-  println("the turn count is  "+turnCount);
-  for(int row=0;row<3;row++){
-    println("");
-  for(int col=0;col<3;col++){
-      print(boardState[row][col]+" ");
-    }
-  }
-  
-}
 
 void keyReleased(){
   if(gameOver==false){
     if (isPlayersTurn){
-      //println("You have chosen slot "+key);
       if (slotsOpen.hasValue(Character.getNumericValue(key))){
         if (key=='0'){
           shapes(0,0);
@@ -96,10 +80,10 @@ void keyReleased(){
         else if (key=='8'){
           shapes(2,2);
         }
-        boardPrint();
         ++turnCount;
+        //sets the value of the slot played to 10, so it cannot be used
         slotsOpen.set(Character.getNumericValue(key),10);
-        //println(slotsOpen);
+        println("The Game is Still Ongoing");
         ChangeCurrentPlayer();
       }
       else{
@@ -110,8 +94,8 @@ void keyReleased(){
   else{
     println("The Game Is Over");
   }
-  
 }
+
 void ChoosingComputerMove(){
   rand=int(random(0,9));
   if (slotsOpen.get(rand)!=10){
@@ -124,7 +108,6 @@ void ChoosingComputerMove(){
 }
 
 void ComputerMakeMove(){
-    //println("The computer has chosen slot "+valueComputerChosen);
     if (valueComputerChosen==0){
       shapes(0,0);
     }
@@ -153,22 +136,21 @@ void ComputerMakeMove(){
       shapes(2,2);
     }
     turnCount++;
-    boardPrint();
     slotsOpen.set(rand,10);
    ChangeCurrentPlayer();
 }
 
 
 void checkForXVictory(){
-//checks for horizantal win
-  for(int x=0;x<3;x++){
-    if(boardState[0][x]==boardState[1][x]&& boardState[0][x]==boardState[2][x] && boardState[0][x]=='X'){
+  for(int setBeingChecked=0;setBeingChecked<3;setBeingChecked++){
+    //checks for horizantal win
+    if(boardState[0][setBeingChecked]==boardState[1][setBeingChecked]&& boardState[0][setBeingChecked]==boardState[2][setBeingChecked] && boardState[0][setBeingChecked]=='X'){
       println("Game Over, X Has Won");
       gameOver=true;
       XHasWon=true;
     }
 //checks for vertical win
-    if(boardState[x][0]==boardState[x][1]&& boardState[x][0]==boardState[x][2] && boardState[x][0]=='X'){
+    if(boardState[setBeingChecked][0]==boardState[setBeingChecked][1]&& boardState[setBeingChecked][0]==boardState[setBeingChecked][2] && boardState[setBeingChecked][0]=='X'){
       println("Game Over, X Has Won");
       gameOver=true;
       XHasWon=true;
@@ -185,21 +167,21 @@ void checkForXVictory(){
 }
 
 void checkForOVictory(){
-//checks for horizantal win
-  for(int x=0;x<3;x++){
-    if(boardState[0][x]==boardState[1][x]&& boardState[0][x]==boardState[2][x] && boardState[0][x]=='O'){
+  for(int setBeingChecked=0;setBeingChecked<3;setBeingChecked++){
+    //checks for horizantal win
+    if(boardState[0][setBeingChecked]==boardState[1][setBeingChecked]&& boardState[0][setBeingChecked]==boardState[2][setBeingChecked] && boardState[0][setBeingChecked]=='O'){
       println("Game Over, O Has Won");
       gameOver=true;
       OHasWon=true;
     }
-//checks for vertical win
-    if(boardState[x][0]==boardState[x][1]&& boardState[x][0]==boardState[x][2] && boardState[x][0]=='O'){
+    //checks for vertical win
+    if(boardState[setBeingChecked][0]==boardState[setBeingChecked][1]&& boardState[setBeingChecked][0]==boardState[setBeingChecked][2] && boardState[setBeingChecked][0]=='O'){
       println("Game Over, O Has Won");
       gameOver=true;
       OHasWon=true;
     }
   }
-//checks for diagonal win
+  //checks for diagonal win
   if(boardState[0][0]==boardState[1][1]&& boardState[0][0]==boardState[2][2] && boardState[0][0]=='O'||
    boardState[0][2]==boardState[1][1]&& boardState[0][2]==boardState[2][0] && boardState[1][1]=='O'){
     println("Game Over, O Has Won");
