@@ -14,15 +14,15 @@ char[][]boardState={rowOne,rowTwo,rowThree};
 
 boolean isPlayersTurn;
 boolean gameOver;
-boolean XHasWon;
-boolean OHasWon;
+boolean xHasWon;
+boolean oHasWon;
 
 void setup() {
   isPlayersTurn=false;
   slotsOpen=new IntList();
   gameOver=false;
-  XHasWon=false;
-  OHasWon=false;
+  xHasWon=false;
+  oHasWon=false;
   size(500, 500);
   for (int valueToGive=0;valueToGive<=8;valueToGive++){
     slotsOpen.set(valueToGive,valueToGive);
@@ -30,18 +30,15 @@ void setup() {
 }
 
 void draw() {
-  if (gameOver==false){
+  if(gameOver==false&&oHasWon==false){
     if(isPlayersTurn==false){
       ChoosingComputerMove();
       ComputerMakeMove();
     }
     grid();
-     if(XHasWon==false)
-      checkForOVictory();
-     if(OHasWon==false)
-      checkForXVictory();
+    checkForAnyVictory();
    
-    if(turnCount>=9&&XHasWon==false&&OHasWon==false){
+    if(turnCount>=9&&xHasWon==false&&oHasWon==false){
       gameOver=true;
       println("Game Over, No winners");
       
@@ -108,85 +105,80 @@ void ChoosingComputerMove(){
 }
 
 void ComputerMakeMove(){
-    if (valueComputerChosen==0){
-      shapes(0,0);
-    }
-    else if (valueComputerChosen==1){
-      shapes(1,0);
-    }
-    else if (valueComputerChosen==2){
-      shapes(2,0);
-    }
-    else if (valueComputerChosen==3){
-      shapes(0,1);
-    }
-    else if (valueComputerChosen==4){
-      shapes(1,1);
-    }
-    else if (valueComputerChosen==5){
-      shapes(2,1);
-    }
-    else if (valueComputerChosen==6){
-      shapes(0,2);
-    }
-    else if (valueComputerChosen==7){
-      shapes(1,2);
-    }
-    else if (valueComputerChosen==8){
-      shapes(2,2);
-    }
-    turnCount++;
-    slotsOpen.set(rand,10);
-   ChangeCurrentPlayer();
-}
-
-
-void checkForXVictory(){
-  for(int setBeingChecked=0;setBeingChecked<3;setBeingChecked++){
-    //checks for horizantal win
-    if(boardState[0][setBeingChecked]==boardState[1][setBeingChecked]&& boardState[0][setBeingChecked]==boardState[2][setBeingChecked] && boardState[0][setBeingChecked]=='X'){
-      println("Game Over, X Has Won");
-      gameOver=true;
-      XHasWon=true;
-    }
-//checks for vertical win
-    if(boardState[setBeingChecked][0]==boardState[setBeingChecked][1]&& boardState[setBeingChecked][0]==boardState[setBeingChecked][2] && boardState[setBeingChecked][0]=='X'){
-      println("Game Over, X Has Won");
-      gameOver=true;
-      XHasWon=true;
-    }
+  if (valueComputerChosen==0){
+    shapes(0,0);
   }
-//checks for diagonal win
-    if(boardState[0][0]==boardState[1][1]&& boardState[0][0]==boardState[2][2] && boardState[0][0]=='X'||
-    boardState[0][2]==boardState[1][1]&& boardState[0][2]==boardState[2][0] && boardState[1][1]=='X'){
-      println("Game Over, X Has Won");
-      gameOver=true;
-      XHasWon=true;
-    }
-
+  else if (valueComputerChosen==1){
+    shapes(1,0);
+  }
+  else if (valueComputerChosen==2){
+    shapes(2,0);
+  }
+  else if (valueComputerChosen==3){
+    shapes(0,1);
+  }
+  else if (valueComputerChosen==4){
+    shapes(1,1);
+  }
+  else if (valueComputerChosen==5){
+    shapes(2,1);
+  }
+  else if (valueComputerChosen==6){
+    shapes(0,2);
+  }
+  else if (valueComputerChosen==7){
+    shapes(1,2);
+  }
+  else if (valueComputerChosen==8){
+    shapes(2,2);
+  }
+  turnCount++;
+  slotsOpen.set(rand,10);
+  ChangeCurrentPlayer();
 }
 
-void checkForOVictory(){
+void checkForAnyVictory(){
   for(int setBeingChecked=0;setBeingChecked<3;setBeingChecked++){
     //checks for horizantal win
-    if(boardState[0][setBeingChecked]==boardState[1][setBeingChecked]&& boardState[0][setBeingChecked]==boardState[2][setBeingChecked] && boardState[0][setBeingChecked]=='O'){
-      println("Game Over, O Has Won");
-      gameOver=true;
-      OHasWon=true;
+    if(boardState[0][setBeingChecked]==boardState[1][setBeingChecked]&& boardState[0][setBeingChecked]==boardState[2][setBeingChecked] && boardState[0][setBeingChecked]!='_'){
+      if(boardState[0][setBeingChecked]=='O'){
+        println("Game Over, O Has Won");
+        gameOver=true;
+        oHasWon=true;
+      }
+      else{
+        println("Game Over, X Has Won");
+        gameOver=true;
+        xHasWon=true;
+      }
     }
     //checks for vertical win
-    if(boardState[setBeingChecked][0]==boardState[setBeingChecked][1]&& boardState[setBeingChecked][0]==boardState[setBeingChecked][2] && boardState[setBeingChecked][0]=='O'){
-      println("Game Over, O Has Won");
-      gameOver=true;
-      OHasWon=true;
+    if(boardState[setBeingChecked][0]==boardState[setBeingChecked][1]&& boardState[setBeingChecked][0]==boardState[setBeingChecked][2] && boardState[setBeingChecked][0]!='_'){
+      if(boardState[setBeingChecked][0]=='O'){
+        println("Game Over, O Has Won");
+        gameOver=true;
+        oHasWon=true;
+      }
+      else{
+        println("Game Over, X Has Won");
+        gameOver=true;
+        xHasWon=true;
+      }
     }
   }
   //checks for diagonal win
-  if(boardState[0][0]==boardState[1][1]&& boardState[0][0]==boardState[2][2] && boardState[0][0]=='O'||
-   boardState[0][2]==boardState[1][1]&& boardState[0][2]==boardState[2][0] && boardState[1][1]=='O'){
-    println("Game Over, O Has Won");
-    gameOver=true;
-    OHasWon=true;
+  if(boardState[0][0]==boardState[1][1]&& boardState[0][0]==boardState[2][2] && boardState[0][0]!='_'||
+    boardState[0][2]==boardState[1][1]&& boardState[0][2]==boardState[2][0] && boardState[1][1]!='_'){
+    if(boardState[1][1]=='O'){
+        println("Game Over, O Has Won");
+        gameOver=true;
+        oHasWon=true;
+      }
+      else{
+        println("Game Over, X Has Won");
+        gameOver=true;
+        xHasWon=true;
+      }
   }
 }
 
